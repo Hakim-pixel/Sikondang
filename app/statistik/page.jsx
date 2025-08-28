@@ -33,12 +33,12 @@ const stats = [
 const featuredDatasets = [
   {
     id: 1,
-    title: "Dataset Indikator Kinerja Kominfo",
+    title: "Detail Data Bidang Urusan Pertanahan - Sikondang",
     description:
-      "Data indikator kinerja kunci yang berkaitan dengan urusan pemerintahan bidang komunikasi dan informatika.",
+      "Data indikator kinerja kunci yang berkaitan dengan urusan pertanahan kota serang.",
     category: "Dataset",
     downloads: "2,341",
-    lastUpdate: "15 Jan 2024",
+    lastUpdate: "15 Jan 2025",
     format: ["CSV", "JSON", "PDF"],
   },
   {
