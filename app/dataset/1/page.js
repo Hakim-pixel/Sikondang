@@ -109,11 +109,13 @@ export default function DetailDataset() {
                   Lihat JSON
                 </button>
               </Link>
-              <Link href="/unduh/data-sikondang.pdf">
-                <button className="bg-[#0A58CA] text-white px-4 py-2 rounded">
-                  Unduh Sekarang
-                </button>
-              </Link>
+              <a
+                href="/unduh/data-sikondang.pdf"
+                download
+                className="bg-[#0A58CA] text-white px-4 py-2 rounded"
+              >
+                Unduh Sekarang
+              </a>
             </div>
           </div>
         </div>
@@ -163,26 +165,26 @@ export default function DetailDataset() {
 
                 {/* Tahun 2023 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {(row.tahun?.["2023"]
+                  {row.tahun?.["2023"]
                     ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
                       (row.tahun["2023"].smt2 === "-" ? 0 : Number(row.tahun["2023"].smt2))
-                    : "-")}
+                    : "-"}
                 </td>
 
                 {/* Tahun 2024 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {(row.tahun?.["2024"]
+                  {row.tahun?.["2024"]
                     ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
                       (row.tahun["2024"].smt2 === "-" ? 0 : Number(row.tahun["2024"].smt2))
-                    : "-")}
+                    : "-"}
                 </td>
 
                 {/* Tahun 2025 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {(row.tahun?.["2025"]
+                  {row.tahun?.["2025"]
                     ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +
                       (row.tahun["2025"].smt2 === "-" ? 0 : Number(row.tahun["2025"].smt2))
-                    : "-")}
+                    : "-"}
                 </td>
               </tr>
             ))}
