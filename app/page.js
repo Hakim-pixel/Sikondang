@@ -9,7 +9,10 @@ export default function Home() {
         {/* Kolom Kiri: Teks & Ikon */}
         <div>
           <h1 className="text-4xl md:text-5xl font-bold text-white">
-            SIKONDANG <span className="text-yellow-400">SATU DATA</span>
+            SATU DATA
+          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white">
+            <span className="text-yellow-400">SIKONDANG</span>
           </h1>
           <p className="text-lg mt-2 mb-10 text-gray-300">
             SISTEM INFORMASI KOTA SERANG DALAM ANGKA

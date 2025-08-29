@@ -18,7 +18,7 @@ export default function DetailDataset() {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    fetch("/response_1755228308890.json") // file taruh di /public
+    fetch("/response_1755228308890.json")
       .then((res) => res.json())
       .then((json) => {
         setDataTable(json);

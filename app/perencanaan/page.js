@@ -10,31 +10,31 @@ const opdsData = [
     id: "pendidikan",
     name: "DINAS PENDIDIKAN DAN KEBUDAYAAN",
     description: "Data dan Statistik Pendidikan, Program Sekolah, Kurikulum.",
-    logo: "/assets/perencanaan/pendidikan.png",
+    logo: "/assets/organisasi/icon.png",
   },
   {
     id: "kesehatan",
     name: "DINAS KESEHATAN",
     description: "Informasi Kesehatan Masyarakat, Data Fasilitas Kesehatan.",
-    logo: "/assets/perencanaan/kesehatan.png",
+    logo: "/assets/organisasi/icon.png",
   },
   {
     id: "pupr",
     name: "DINAS PEKERJAAN UMUM DAN PENATAAN RUANG",
     description: "Pembangunan Infrastruktur, Penataan Kota, Tata Ruang.",
-    logo: "/assets/perencanaan/PUPR.png",
+    logo: "/assets/organisasi/icon.png",
   },
   {
     id: "Diskominfo",
     name: "DISKOMINFO KOTA SERANG",
     description: "Pengembangan Teknologi Informasi, Informasi Publik dan Persandian.",
-    logo: "/assets/perencanaan/kominfo.png",
+    logo: "/assets/organisasi/icon.png",
   },
   {
     id: "sosial",
     name: "DINAS SOSIAL",
     description: "Program Kesejahteraan Sosial, Pemberdayaan Masyarakat.",
-    logo: "/assets/perencanaan/dinsos.png",
+    logo: "/assets/organisasi/icon.png",
   },
 ];
 
