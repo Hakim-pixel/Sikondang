@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import * as XLSX from "xlsx";
 import {
   BarChart,
   Bar,
@@ -24,7 +25,6 @@ export default function DetailDataset() {
         setDataTable(json);
 
         if (json.length > 0) {
-          // ambil total per tahun (smt1 + smt2)
           const tahunData = Object.entries(json[0].tahun).map(
             ([tahun, smt]) => {
               const total =
@@ -38,6 +38,47 @@ export default function DetailDataset() {
       })
       .catch((err) => console.error("Gagal ambil data:", err));
   }, []);
+
+  // 🔹 Fungsi download tabel + chart ke Excel
+  const handleDownloadExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // Sheet 1: Data Tabel
+    const tableSheet = XLSX.utils.json_to_sheet(
+      dataTable.map((row, idx) => {
+        return {
+          No: idx + 1,
+          "Kode SSD": row.kode_ssd,
+          Uraian: row.uraian,
+          Klasifikasi: row.klasifikasi,
+          Satuan: row.satuan,
+          "2023":
+            row.tahun?.["2023"]
+              ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
+                (row.tahun["2023"].smt2 === "-" ? 0 : Number(row.tahun["2023"].smt2))
+              : "-",
+          "2024":
+            row.tahun?.["2024"]
+              ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
+                (row.tahun["2024"].smt2 === "-" ? 0 : Number(row.tahun["2024"].smt2))
+              : "-",
+          "2025":
+            row.tahun?.["2025"]
+              ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +
+                (row.tahun["2025"].smt2 === "-" ? 0 : Number(row.tahun["2025"].smt2))
+              : "-",
+        };
+      })
+    );
+    XLSX.utils.book_append_sheet(wb, tableSheet, "Tabel Data");
+
+    // Sheet 2: Data Chart
+    const chartSheet = XLSX.utils.json_to_sheet(chartData);
+    XLSX.utils.book_append_sheet(wb, chartSheet, "Chart Data");
+
+    // Simpan file
+    XLSX.writeFile(wb, "data-sikondang.xlsx");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
@@ -103,7 +144,7 @@ export default function DetailDataset() {
             </ul>
 
             {/* Tombol Aksi */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-wrap gap-4 mt-6">
               <Link href="/response_1755228308890.json">
                 <button className="bg-orange-500 text-white px-4 py-2 rounded">
                   Lihat JSON
@@ -114,8 +155,14 @@ export default function DetailDataset() {
                 download
                 className="bg-[#0A58CA] text-white px-4 py-2 rounded"
               >
-                Unduh Sekarang
+                Unduh PDF
               </a>
+              <button
+                onClick={handleDownloadExcel}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Unduh Data (Excel)
+              </button>
             </div>
           </div>
         </div>
@@ -163,7 +210,6 @@ export default function DetailDataset() {
                 <td className="border px-2 py-2">{row.klasifikasi}</td>
                 <td className="border px-2 py-2">{row.satuan}</td>
 
-                {/* Tahun 2023 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
                   {row.tahun?.["2023"]
                     ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
@@ -171,7 +217,6 @@ export default function DetailDataset() {
                     : "-"}
                 </td>
 
-                {/* Tahun 2024 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
                   {row.tahun?.["2024"]
                     ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
@@ -179,7 +224,6 @@ export default function DetailDataset() {
                     : "-"}
                 </td>
 
-                {/* Tahun 2025 */}
                 <td className="border px-2 py-2 bg-blue-500 text-white">
                   {row.tahun?.["2025"]
                     ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +

@@ -1,14 +1,74 @@
 [
   {
     "id": 1,
-    "kode_ssd": "1002.050",
-    "uraian": "Luas Tanah ...",
-    "klasifikasi": "Kel Banten",
+    "kode_ssd": "2001.001",
+    "uraian": "Luas Tanah Pertanian",
+    "klasifikasi": "Kel Serang",
     "satuan": "Ha",
     "tahun": {
-      "2023": { "smt1": "10", "smt2": "15" },
-      "2024": { "smt1": "20", "smt2": "25" },
-      "2025": { "smt1": "30", "smt2": "40" }
+      "2023": { "smt1": "120", "smt2": "130" },
+      "2024": { "smt1": "135", "smt2": "140" },
+      "2025": { "smt1": "145", "smt2": "150" }
+    }
+  },
+  {
+    "id": 2,
+    "kode_ssd": "2001.002",
+    "uraian": "Luas Tanah Perkebunan",
+    "klasifikasi": "Kel Cipocok Jaya",
+    "satuan": "Ha",
+    "tahun": {
+      "2023": { "smt1": "80", "smt2": "82" },
+      "2024": { "smt1": "84", "smt2": "85" },
+      "2025": { "smt1": "86", "smt2": "88" }
+    }
+  },
+  {
+    "id": 3,
+    "kode_ssd": "2001.003",
+    "uraian": "Luas Tanah Perumahan",
+    "klasifikasi": "Kel Curug",
+    "satuan": "Ha",
+    "tahun": {
+      "2023": { "smt1": "150", "smt2": "160" },
+      "2024": { "smt1": "170", "smt2": "175" },
+      "2025": { "smt1": "180", "smt2": "190" }
+    }
+  },
+  {
+    "id": 4,
+    "kode_ssd": "2001.004",
+    "uraian": "Luas Tanah Fasilitas Umum",
+    "klasifikasi": "Kel Walantaka",
+    "satuan": "Ha",
+    "tahun": {
+      "2023": { "smt1": "35", "smt2": "37" },
+      "2024": { "smt1": "38", "smt2": "39" },
+      "2025": { "smt1": "40", "smt2": "42" }
+    }
+  },
+  {
+    "id": 5,
+    "kode_ssd": "2001.005",
+    "uraian": "Luas Tanah Kosong",
+    "klasifikasi": "Kel Kasemen",
+    "satuan": "Ha",
+    "tahun": {
+      "2023": { "smt1": "20", "smt2": "22" },
+      "2024": { "smt1": "25", "smt2": "27" },
+      "2025": { "smt1": "28", "smt2": "30" }
+    }
+  },
+  {
+    "id": 6,
+    "kode_ssd": "2001.006",
+    "uraian": "Luas Tanah Industri",
+    "klasifikasi": "Kel Taktakan",
+    "satuan": "Ha",
+    "tahun": {
+      "2023": { "smt1": "60", "smt2": "65" },
+      "2024": { "smt1": "68", "smt2": "70" },
+      "2025": { "smt1": "72", "smt2": "75" }
     }
   }
 ]
