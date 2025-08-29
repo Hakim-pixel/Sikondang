@@ -12,6 +12,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 export default function DetailDataset() {
@@ -25,14 +26,28 @@ export default function DetailDataset() {
         setDataTable(json);
 
         if (json.length > 0) {
-          const tahunData = Object.entries(json[0].tahun).map(
-            ([tahun, smt]) => {
-              const total =
-                (smt.smt1 === "-" ? 0 : Number(smt.smt1)) +
-                (smt.smt2 === "-" ? 0 : Number(smt.smt2));
-              return { tahun, total };
-            }
-          );
+          const tahunKeys = Object.keys(json[0].tahun);
+
+          // 🔹 bentuk chartData multi-indikator
+          const tahunData = tahunKeys.map((tahun) => {
+            const entry = { tahun };
+
+            json.forEach((row) => {
+              const valSmt1 =
+                row.tahun[tahun]?.smt1 === "-"
+                  ? 0
+                  : Number(row.tahun[tahun]?.smt1);
+              const valSmt2 =
+                row.tahun[tahun]?.smt2 === "-"
+                  ? 0
+                  : Number(row.tahun[tahun]?.smt2);
+
+              entry[row.uraian] = valSmt1 + valSmt2;
+            });
+
+            return entry;
+          });
+
           setChartData(tahunData);
         }
       })
@@ -76,7 +91,6 @@ export default function DetailDataset() {
     const chartSheet = XLSX.utils.json_to_sheet(chartData);
     XLSX.utils.book_append_sheet(wb, chartSheet, "Chart Data");
 
-    // Simpan file
     XLSX.writeFile(wb, "data-sikondang.xlsx");
   };
 
@@ -117,12 +131,7 @@ export default function DetailDataset() {
                 Sertifikat Hak Wakaf di Kecamatan Kasemen berdasarkan Kelurahan
               </li>
               <li>
-                <span className="font-semibold">Definisi:</span> Perwakafan
-                tanah hak milik dilindungi dan diatur dengan Peraturan
-                Pemerintah. Dan dengan demikian, maka sertifikat tanah itu
-                sebagai alat pembuktian yang kuat bahwa tanah itu ada yang
-                mengelola. Luas tanah adalah akumulasi sampai dengan tahun
-                berjalan
+                <span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.
               </li>
               <li>
                 <span className="font-semibold">Ukuran:</span> Luas
@@ -131,12 +140,10 @@ export default function DetailDataset() {
                 <span className="font-semibold">Periode:</span> Tahunan
               </li>
               <li>
-                <span className="font-semibold">Peruntukan Data:</span> Data
-                Provinsi
+                <span className="font-semibold">Peruntukan Data:</span> Data Provinsi
               </li>
               <li>
-                <span className="font-semibold">Kelompok Data:</span> Data
-                Sektoral (Induk)
+                <span className="font-semibold">Kelompok Data:</span> Data Sektoral (Induk)
               </li>
               <li>
                 <span className="font-semibold">Satuan:</span> Hektar (Ha)
@@ -166,24 +173,6 @@ export default function DetailDataset() {
             </div>
           </div>
         </div>
-        {/* Metadata */}
-        <div className="mt-6 text-sm text-gray-600">
-          <p>
-            <strong>Metadata Dibuat:</strong> 4 Juli 2025
-          </p>
-          <p>
-            <strong>Metadata Diperbarui:</strong> 17 Juli 2025
-          </p>
-          <p>
-            <strong>Sumber Data:</strong> Dinas Kominfo
-          </p>
-          <p>
-            <strong>Jadwal Pemutakhiran:</strong> 1 Tahun Sekali
-          </p>
-          <p>
-            <strong>Sifat Data:</strong> Terbuka
-          </p>
-        </div>
       </div>
 
       {/* TABLE */}
@@ -209,30 +198,23 @@ export default function DetailDataset() {
                 <td className="border px-2 py-2 text-left">{row.uraian}</td>
                 <td className="border px-2 py-2">{row.klasifikasi}</td>
                 <td className="border px-2 py-2">{row.satuan}</td>
-
-                <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {row.tahun?.["2023"]
-                    ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
-                      (row.tahun["2023"].smt2 === "-" ? 0 : Number(row.tahun["2023"].smt2))
-                    : "-"}
-                </td>
-
-                <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {row.tahun?.["2024"]
-                    ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
-                      (row.tahun["2024"].smt2 === "-" ? 0 : Number(row.tahun["2024"].smt2))
-                    : "-"}
-                </td>
-
-                <td className="border px-2 py-2 bg-blue-500 text-white">
-                  {row.tahun?.["2025"]
-                    ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +
-                      (row.tahun["2025"].smt2 === "-" ? 0 : Number(row.tahun["2025"].smt2))
-                    : "-"}
-                </td>
+                {["2023", "2024", "2025"].map((tahun) => {
+                  const val =
+                    row.tahun?.[tahun]
+                      ? (row.tahun[tahun].smt1 === "-" ? 0 : Number(row.tahun[tahun].smt1)) +
+                        (row.tahun[tahun].smt2 === "-" ? 0 : Number(row.tahun[tahun].smt2))
+                      : "-";
+                  return (
+                    <td
+                      key={tahun}
+                      className="border px-2 py-2 bg-blue-500 text-white"
+                    >
+                      {val}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
-
             {dataTable.length === 0 && (
               <tr>
                 <td colSpan="8" className="text-center py-4 text-gray-500">
@@ -247,13 +229,21 @@ export default function DetailDataset() {
       {/* CHART */}
       <h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
       <div className="bg-white p-4 rounded-lg shadow">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="tahun" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="total" fill="#1e88e5" name="Total per Tahun" />
+            <Legend />
+            {dataTable.map((row, index) => (
+              <Bar
+                key={row.id}
+                dataKey={row.uraian}
+                fill={`hsl(${(index * 60) % 360}, 70%, 50%)`}
+                stackId="a" // 🔹 kalau mau stacked, hapus kalau mau grouped
+              />
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
