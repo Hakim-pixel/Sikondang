@@ -38,7 +38,7 @@ const featuredDatasets = [
       "Data indikator kinerja kunci yang berkaitan dengan urusan pertanahan kota serang.",
     category: "Dataset",
     downloads: "2,341",
-    lastUpdate: "15 Jan 2025",
+    lastUpdate: "17 Juli 2025",
     format: ["CSV", "JSON", "PDF"],
   },
   {

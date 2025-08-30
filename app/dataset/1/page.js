@@ -19,6 +19,7 @@ export default function DetailDataset() {
   const [dataTable, setDataTable] = useState([]);
   const [chartData, setChartData] = useState([]);
 
+  // 🔹 Ambil data JSON
   useEffect(() => {
     fetch("/response_1755228308890.json")
       .then((res) => res.json())
@@ -26,26 +27,25 @@ export default function DetailDataset() {
         setDataTable(json);
 
         if (json.length > 0) {
-  const tahunKeys = Object.keys(json[0].tahun);
+          const tahunKeys = Object.keys(json[0].tahun);
 
-  const tahunData = tahunKeys.map((tahun) => {
-    let total = 0;
+          const tahunData = tahunKeys.map((tahun) => {
+            let total = 0;
 
-    json.forEach((row) => {
-      const valSmt1 =
-        row.tahun[tahun]?.smt1 === "-" ? 0 : Number(row.tahun[tahun]?.smt1);
-      const valSmt2 =
-        row.tahun[tahun]?.smt2 === "-" ? 0 : Number(row.tahun[tahun]?.smt2);
+            json.forEach((row) => {
+              const valSmt1 =
+                row.tahun[tahun]?.smt1 === "-" ? 0 : Number(row.tahun[tahun]?.smt1);
+              const valSmt2 =
+                row.tahun[tahun]?.smt2 === "-" ? 0 : Number(row.tahun[tahun]?.smt2);
 
-      total += valSmt1 + valSmt2;
-    });
+              total += valSmt1 + valSmt2;
+            });
 
-    return { tahun, total };
-  });
+            return { tahun, total };
+          });
 
-  setChartData(tahunData);
-}
-
+          setChartData(tahunData);
+        }
       })
       .catch((err) => console.error("Gagal ambil data:", err));
   }, []);
@@ -56,30 +56,28 @@ export default function DetailDataset() {
 
     // Sheet 1: Data Tabel
     const tableSheet = XLSX.utils.json_to_sheet(
-      dataTable.map((row, idx) => {
-        return {
-          No: idx + 1,
-          "Kode SSD": row.kode_ssd,
-          Uraian: row.uraian,
-          Klasifikasi: row.klasifikasi,
-          Satuan: row.satuan,
-          "2023":
-            row.tahun?.["2023"]
-              ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
-                (row.tahun["2023"].smt2 === "-" ? 0 : Number(row.tahun["2023"].smt2))
-              : "-",
-          "2024":
-            row.tahun?.["2024"]
-              ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
-                (row.tahun["2024"].smt2 === "-" ? 0 : Number(row.tahun["2024"].smt2))
-              : "-",
-          "2025":
-            row.tahun?.["2025"]
-              ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +
-                (row.tahun["2025"].smt2 === "-" ? 0 : Number(row.tahun["2025"].smt2))
-              : "-",
-        };
-      })
+      dataTable.map((row, idx) => ({
+        No: idx + 1,
+        "Kode SSD": row.kode_ssd,
+        Uraian: row.uraian,
+        Klasifikasi: row.klasifikasi,
+        Satuan: row.satuan,
+        "2023":
+          row.tahun?.["2023"]
+            ? (row.tahun["2023"].smt1 === "-" ? 0 : Number(row.tahun["2023"].smt1)) +
+              (row.tahun["2023"].smt2 === "-" ? 0 : Number(row.tahun["2023"].smt2))
+            : "-",
+        "2024":
+          row.tahun?.["2024"]
+            ? (row.tahun["2024"].smt1 === "-" ? 0 : Number(row.tahun["2024"].smt1)) +
+              (row.tahun["2024"].smt2 === "-" ? 0 : Number(row.tahun["2024"].smt2))
+            : "-",
+        "2025":
+          row.tahun?.["2025"]
+            ? (row.tahun["2025"].smt1 === "-" ? 0 : Number(row.tahun["2025"].smt1)) +
+              (row.tahun["2025"].smt2 === "-" ? 0 : Number(row.tahun["2025"].smt2))
+            : "-",
+      }))
     );
     XLSX.utils.book_append_sheet(wb, tableSheet, "Tabel Data");
 
@@ -92,7 +90,7 @@ export default function DetailDataset() {
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
-      {/* KARTU INFO */}
+      {/* ========================= KARTU INFO ========================= */}
       <div className="lg:col-span-2 bg-white border rounded-lg shadow-sm p-6 mb-8">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Logo */}
@@ -112,37 +110,16 @@ export default function DetailDataset() {
             </h2>
 
             <ul className="list-disc list-inside text-gray-700 text-sm space-y-2">
-              <li>
-                <span className="font-semibold">No Indikator:</span> 1002
-              </li>
-              <li>
-                <span className="font-semibold">Bidang Urusan:</span> URUSAN
-                PEMERINTAH BIDANG PERTANAHAN
-              </li>
-              <li>
-                <span className="font-semibold">Indikator:</span> Luas Tanah
-              </li>
-              <li>
-                <span className="font-semibold">Konsep:</span> Luas Tanah Pertanian Sekota Serang
-              </li>
-              <li>
-                <span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.
-              </li>
-              <li>
-                <span className="font-semibold">Ukuran:</span> Luas
-              </li>
-              <li>
-                <span className="font-semibold">Periode:</span> Tahunan
-              </li>
-              <li>
-                <span className="font-semibold">Peruntukan Data:</span> Data Provinsi
-              </li>
-              <li>
-                <span className="font-semibold">Kelompok Data:</span> Data Sektoral (Induk)
-              </li>
-              <li>
-                <span className="font-semibold">Satuan:</span> Hektar (Ha)
-              </li>
+              <li><span className="font-semibold">No Indikator:</span> 1002</li>
+              <li><span className="font-semibold">Bidang Urusan:</span> URUSAN PEMERINTAH BIDANG PERTANAHAN</li>
+              <li><span className="font-semibold">Indikator:</span> Luas Tanah</li>
+              <li><span className="font-semibold">Konsep:</span> Luas Tanah Pertanian Sekota Serang</li>
+              <li><span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.</li>
+              <li><span className="font-semibold">Ukuran:</span> Luas</li>
+              <li><span className="font-semibold">Periode:</span> Tahunan</li>
+              <li><span className="font-semibold">Peruntukan Data:</span> Data Provinsi</li>
+              <li><span className="font-semibold">Kelompok Data:</span> Data Sektoral (Induk)</li>
+              <li><span className="font-semibold">Satuan:</span> Hektar (Ha)</li>
             </ul>
 
             {/* Tombol Aksi */}
@@ -168,29 +145,18 @@ export default function DetailDataset() {
             </div>
           </div>
         </div>
-         {/* Metadata */}
-        <div className="mt-6 text-sm text-gray-600">
-          <p>
-            <strong>Metadata Dibuat:</strong> 4 Juli 2025
-          </p>
-          <p>
-            <strong>Metadata Diperbarui:</strong> 17 Juli 2025
-          </p>
-          <p>
-            <strong>Sumber Data:</strong> Dinas Kominfo
-          </p>
-          <p>
-            <strong>Jadwal Pemutakhiran:</strong> 1 Tahun Sekali
-          </p>
-          <p>
-            <strong>Sifat Data:</strong> Terbuka
-          </p>
-        </div>
-      
-      </div>
-      
 
-      {/* TABLE */}
+        {/* Metadata */}
+        <div className="mt-6 text-sm text-gray-600">
+          <p><strong>Metadata Dibuat:</strong> 4 Juli 2025</p>
+          <p><strong>Metadata Diperbarui:</strong> 17 Juli 2025</p>
+          <p><strong>Sumber Data:</strong> Dinas Kominfo</p>
+          <p><strong>Jadwal Pemutakhiran:</strong> 1 Tahun Sekali</p>
+          <p><strong>Sifat Data:</strong> Terbuka</p>
+        </div>
+      </div>
+
+      {/* ========================= TABLE ========================= */}
       <div className="overflow-x-auto mb-10">
         <table className="w-full text-sm border border-gray-300">
           <thead className="bg-gray-100 text-center">
@@ -214,16 +180,12 @@ export default function DetailDataset() {
                 <td className="border px-2 py-2">{row.klasifikasi}</td>
                 <td className="border px-2 py-2">{row.satuan}</td>
                 {["2023", "2024", "2025"].map((tahun) => {
-                  const val =
-                    row.tahun?.[tahun]
-                      ? (row.tahun[tahun].smt1 === "-" ? 0 : Number(row.tahun[tahun].smt1)) +
-                        (row.tahun[tahun].smt2 === "-" ? 0 : Number(row.tahun[tahun].smt2))
-                      : "-";
+                  const val = row.tahun?.[tahun]
+                    ? (row.tahun[tahun].smt1 === "-" ? 0 : Number(row.tahun[tahun].smt1)) +
+                      (row.tahun[tahun].smt2 === "-" ? 0 : Number(row.tahun[tahun].smt2))
+                    : "-";
                   return (
-                    <td
-                      key={tahun}
-                      className="border px-2 py-2 bg-blue-500 text-white"
-                    >
+                    <td key={tahun} className="border px-2 py-2 bg-blue-500 text-white">
                       {val}
                     </td>
                   );
@@ -241,41 +203,39 @@ export default function DetailDataset() {
         </table>
       </div>
 
-      
-      {/* CHART */}
-<h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
-<div className="bg-white p-4 rounded-lg shadow mb-10">
-  <ResponsiveContainer width="100%" height={400}>
-    <BarChart data={chartData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="tahun" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="total" fill="#0A58CA" />
-    </BarChart>
-  </ResponsiveContainer>
-</div>
+      {/* ========================= CHART ========================= */}
+      <h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
+      <div className="bg-white p-4 rounded-lg shadow mb-10">
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="tahun" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="total" fill="#0A58CA" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
 
-{/* CHART MIRING */}
-<h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun (Horizontal)</h2>
-<div className="bg-white p-4 rounded-lg shadow">
-  <ResponsiveContainer width="100%" height={400}>
-    <BarChart
-      layout="vertical"
-      data={chartData}
-      margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis type="number" />
-      <YAxis dataKey="tahun" type="category" />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="total" fill="#198754" />
-    </BarChart>
-  </ResponsiveContainer>
-</div>
-
+      {/* ========================= CHART MIRING ========================= */}
+      <h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
+      <div className="bg-white p-4 rounded-lg shadow">
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            layout="vertical"
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" />
+            <YAxis dataKey="tahun" type="category" />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="total" fill="#198754" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
