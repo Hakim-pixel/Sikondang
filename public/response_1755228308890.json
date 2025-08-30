@@ -14,7 +14,7 @@
   {
     "id": 2,
     "kode_ssd": "2001.002",
-    "uraian": "Luas Tanah Perkebunan",
+    "uraian": "Luas Tanah Pertanian",
     "klasifikasi": "Kel Cipocok Jaya",
     "satuan": "Ha",
     "tahun": {
@@ -26,7 +26,7 @@
   {
     "id": 3,
     "kode_ssd": "2001.003",
-    "uraian": "Luas Tanah Perumahan",
+    "uraian": "Luas Tanah Pertanian",
     "klasifikasi": "Kel Curug",
     "satuan": "Ha",
     "tahun": {
@@ -38,7 +38,7 @@
   {
     "id": 4,
     "kode_ssd": "2001.004",
-    "uraian": "Luas Tanah Fasilitas Umum",
+    "uraian": "Luas Tanah Pertanian",
     "klasifikasi": "Kel Walantaka",
     "satuan": "Ha",
     "tahun": {
@@ -50,7 +50,7 @@
   {
     "id": 5,
     "kode_ssd": "2001.005",
-    "uraian": "Luas Tanah Kosong",
+    "uraian": "Luas Tanah Pertanian",
     "klasifikasi": "Kel Kasemen",
     "satuan": "Ha",
     "tahun": {
@@ -62,7 +62,7 @@
   {
     "id": 6,
     "kode_ssd": "2001.006",
-    "uraian": "Luas Tanah Industri",
+    "uraian": "Luas Tanah Pertanian",
     "klasifikasi": "Kel Taktakan",
     "satuan": "Ha",
     "tahun": {

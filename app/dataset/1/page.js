@@ -26,30 +26,26 @@ export default function DetailDataset() {
         setDataTable(json);
 
         if (json.length > 0) {
-          const tahunKeys = Object.keys(json[0].tahun);
+  const tahunKeys = Object.keys(json[0].tahun);
 
-          // 🔹 bentuk chartData multi-indikator
-          const tahunData = tahunKeys.map((tahun) => {
-            const entry = { tahun };
+  const tahunData = tahunKeys.map((tahun) => {
+    let total = 0;
 
-            json.forEach((row) => {
-              const valSmt1 =
-                row.tahun[tahun]?.smt1 === "-"
-                  ? 0
-                  : Number(row.tahun[tahun]?.smt1);
-              const valSmt2 =
-                row.tahun[tahun]?.smt2 === "-"
-                  ? 0
-                  : Number(row.tahun[tahun]?.smt2);
+    json.forEach((row) => {
+      const valSmt1 =
+        row.tahun[tahun]?.smt1 === "-" ? 0 : Number(row.tahun[tahun]?.smt1);
+      const valSmt2 =
+        row.tahun[tahun]?.smt2 === "-" ? 0 : Number(row.tahun[tahun]?.smt2);
 
-              entry[row.uraian] = valSmt1 + valSmt2;
-            });
+      total += valSmt1 + valSmt2;
+    });
 
-            return entry;
-          });
+    return { tahun, total };
+  });
 
-          setChartData(tahunData);
-        }
+  setChartData(tahunData);
+}
+
       })
       .catch((err) => console.error("Gagal ambil data:", err));
   }, []);
@@ -112,7 +108,7 @@ export default function DetailDataset() {
           {/* Konten */}
           <div className="flex-1">
             <h2 className="text-lg font-semibold text-gray-800 mb-3">
-              Detail Data Bidang Urusan - Sikondang
+              Luas Tanah Pertanian Sekota Serang
             </h2>
 
             <ul className="list-disc list-inside text-gray-700 text-sm space-y-2">
@@ -127,8 +123,7 @@ export default function DetailDataset() {
                 <span className="font-semibold">Indikator:</span> Luas Tanah
               </li>
               <li>
-                <span className="font-semibold">Konsep:</span> Luas Tanah dengan
-                Sertifikat Hak Wakaf di Kecamatan Kasemen berdasarkan Kelurahan
+                <span className="font-semibold">Konsep:</span> Luas Tanah Pertanian Sekota Serang
               </li>
               <li>
                 <span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.
@@ -173,7 +168,27 @@ export default function DetailDataset() {
             </div>
           </div>
         </div>
+         {/* Metadata */}
+        <div className="mt-6 text-sm text-gray-600">
+          <p>
+            <strong>Metadata Dibuat:</strong> 4 Juli 2025
+          </p>
+          <p>
+            <strong>Metadata Diperbarui:</strong> 17 Juli 2025
+          </p>
+          <p>
+            <strong>Sumber Data:</strong> Dinas Kominfo
+          </p>
+          <p>
+            <strong>Jadwal Pemutakhiran:</strong> 1 Tahun Sekali
+          </p>
+          <p>
+            <strong>Sifat Data:</strong> Terbuka
+          </p>
+        </div>
+      
       </div>
+      
 
       {/* TABLE */}
       <div className="overflow-x-auto mb-10">
@@ -226,27 +241,41 @@ export default function DetailDataset() {
         </table>
       </div>
 
+      
       {/* CHART */}
-      <h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="tahun" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {dataTable.map((row, index) => (
-              <Bar
-                key={row.id}
-                dataKey={row.uraian}
-                fill={`hsl(${(index * 60) % 360}, 70%, 50%)`}
-                stackId="a" // 🔹 kalau mau stacked, hapus kalau mau grouped
-              />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+<h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun</h2>
+<div className="bg-white p-4 rounded-lg shadow mb-10">
+  <ResponsiveContainer width="100%" height={400}>
+    <BarChart data={chartData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="tahun" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="total" fill="#0A58CA" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+
+{/* CHART MIRING */}
+<h2 className="text-xl font-semibold mb-4">Grafik Data per Tahun (Horizontal)</h2>
+<div className="bg-white p-4 rounded-lg shadow">
+  <ResponsiveContainer width="100%" height={400}>
+    <BarChart
+      layout="vertical"
+      data={chartData}
+      margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis type="number" />
+      <YAxis dataKey="tahun" type="category" />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="total" fill="#198754" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+
     </div>
   );
 }
