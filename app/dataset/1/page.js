@@ -111,15 +111,17 @@ export default function DetailDataset() {
 
             <ul className="list-disc list-inside text-gray-700 text-sm space-y-2">
               <li><span className="font-semibold">No Indikator:</span> 1002</li>
-              <li><span className="font-semibold">Bidang Urusan:</span> URUSAN PEMERINTAH BIDANG PERTANAHAN</li>
-              <li><span className="font-semibold">Indikator:</span> Luas Tanah</li>
-              <li><span className="font-semibold">Konsep:</span> Luas Tanah Pertanian Sekota Serang</li>
-              <li><span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.</li>
-              <li><span className="font-semibold">Ukuran:</span> Luas</li>
-              <li><span className="font-semibold">Periode:</span> Tahunan</li>
-              <li><span className="font-semibold">Peruntukan Data:</span> Data Provinsi</li>
-              <li><span className="font-semibold">Kelompok Data:</span> Data Sektoral (Induk)</li>
-              <li><span className="font-semibold">Satuan:</span> Hektar (Ha)</li>
+<li><span className="font-semibold">OPD:</span> Dinas Pertanahan Kota Serang</li>
+<li><span className="font-semibold">Bidang Urusan:</span> URUSAN PEMERINTAH BIDANG PERTANAHAN</li>
+<li><span className="font-semibold">Indikator:</span> Luas Tanah</li>
+<li><span className="font-semibold">Konsep:</span> Luas Tanah Pertanian Sekota Serang</li>
+<li><span className="font-semibold">Definisi:</span> Perwakafan tanah hak milik dilindungi dan diatur dengan Peraturan Pemerintah.</li>
+<li><span className="font-semibold">Ukuran:</span> Luas</li>
+<li><span className="font-semibold">Periode:</span> Tahunan</li>
+<li><span className="font-semibold">Peruntukan Data:</span> Data Provinsi</li>
+<li><span className="font-semibold">Kelompok Data:</span> Data Sektoral (Induk)</li>
+<li><span className="font-semibold">Satuan:</span> Hektar (Ha)</li>
+
             </ul>
 
             {/* Tombol Aksi */}
