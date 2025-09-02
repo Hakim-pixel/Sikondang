@@ -84,14 +84,14 @@ const latestNews = [
     title: "Update Sistem Portal Satudata: Fitur Visualisasi Data",
     excerpt: "Portal Satudata Kota Serang kini dilengkapi dengan fitur visualisasi data interaktif...",
     date: "12 Januari 2024",
-    image: "/assets/statistik/p4.png",
+    image: "/assets/berita/berita2.png",
   },
   {
     id: 3,
     title: "Workshop Pemanfaatan Data Terbuka untuk Peneliti",
     excerpt: "Dinas Komunikasi dan Informatika Kota Serang mengadakan workshop pemanfaatan data terbuka...",
     date: "10 Januari 2024",
-    image: "/assets/statistik/p4.png",
+    image: "/assets/berita/berita3.png",
   },
 ]
 
