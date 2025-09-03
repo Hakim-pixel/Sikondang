@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
     <html lang="id">
       <body className={`${inter.className} flex flex-col min-h-screen bg-gradient-to-r bg-[#006BFF]`}>
         <Header />
-        {/* children adalah tempat konten utama (page.js) akan muncul */}
         {children}
         <Footer />
       </body>
