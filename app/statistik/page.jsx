@@ -33,7 +33,7 @@ const stats = [
 const featuredDatasets = [
   {
     id: 1,
-    title: "Detail Data Bidang Urusan Pertanahan - Sikondang",
+    title: "Detail Data Bidang Urusan Pertanian - Sikondang",
     description:
       "Data indikator kinerja kunci yang berkaitan dengan urusan pertanahan kota serang.",
     category: "Dataset",

@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, Calendar, Search } from "lucide-react";
@@ -14,18 +20,31 @@ export default function DatasetPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api/dataset");
-      const data = await res.json();
-      setDatasets(data);
+      try {
+        // ✅ Ganti endpoint agar ambil data dari backend kamu (misal Express.js)
+        const res = await fetch("http://localhost:5000/api/datasets");
+
+        if (!res.ok) throw new Error("Gagal mengambil dataset");
+        const data = await res.json();
+        setDatasets(data);
+      } catch (err) {
+        console.error(err);
+      }
     }
     fetchData();
   }, []);
 
-  const filteredDatasets = datasets.filter((d) =>
-    d.title.toLowerCase().includes(search.toLowerCase()) ||
-    d.description.toLowerCase().includes(search.toLowerCase()) ||
-    d.category.toLowerCase().includes(search.toLowerCase())
-  );
+  // Filter pencarian
+  const filteredDatasets = datasets.filter((d) => {
+    const title = d.title?.toLowerCase() || "";
+    const desc = d.description?.toLowerCase() || "";
+    const cat = d.category?.toLowerCase() || "";
+    return (
+      title.includes(search.toLowerCase()) ||
+      desc.includes(search.toLowerCase()) ||
+      cat.includes(search.toLowerCase())
+    );
+  });
 
   return (
     <section className="py-16 bg-gray-50 min-h-screen">
@@ -63,9 +82,11 @@ export default function DatasetPage() {
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
-                      <Badge variant="secondary">{d.category}</Badge>
-                      <div className="flex gap-1">
-                        {d.format.map((f, i) => (
+                      <Badge variant="secondary">
+                        {d.category || "Tanpa Kategori"}
+                      </Badge>
+                      <div className="flex gap-1 flex-wrap justify-end">
+                        {(d.format || ["CSV"]).map((f, i) => (
                           <Badge key={i} variant="outline" className="text-xs">
                             {f}
                           </Badge>
@@ -73,19 +94,19 @@ export default function DatasetPage() {
                       </div>
                     </div>
                     <CardTitle className="text-lg leading-tight">
-                      {d.title}
+                      {d.title || "Dataset tanpa judul"}
                     </CardTitle>
                     <CardDescription className="text-sm line-clamp-3">
-                      {d.description}
+                      {d.description || "Tidak ada deskripsi."}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                       <div className="flex items-center gap-1">
-                        <Download className="h-4 w-4" /> {d.downloads} unduhan
+                        <Download className="h-4 w-4" /> {d.downloads || 0} unduhan
                       </div>
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" /> {d.lastUpdate}
+                        <Calendar className="h-4 w-4" /> {d.lastUpdate || "-"}
                       </div>
                     </div>
                     <div className="flex gap-2">

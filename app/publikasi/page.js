@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Publikasi() {
+  const router = useRouter();
+
   const dataPublikasi = [
     {
       id: 1,
@@ -12,7 +15,7 @@ export default function Publikasi() {
       tentang: 'Lorem ipsum.',
       kategori: 'Diskominfo',
       abstrak: 'Lorem ipsum.',
-      lampiran: 'Tersedia',
+      lampiran: '/assets/publikasi/file1.pdf',
     },
     {
       id: 2,
@@ -22,7 +25,7 @@ export default function Publikasi() {
       tentang: 'Lorem ipsum.',
       kategori: 'Diskominfo',
       abstrak: 'Lorem ipsum.',
-      lampiran: 'Tersedia',
+      lampiran: '/assets/publikasi/file2.pdf',
     },
     {
       id: 3,
@@ -32,7 +35,7 @@ export default function Publikasi() {
       tentang: 'lorem ipsum.',
       kategori: 'Infografis Kecamatan',
       abstrak: 'Lorem Ipsum.',
-      lampiran: 'Tersedia',
+      lampiran: '/assets/publikasi/file3.pdf',
     },
   ];
 
@@ -80,15 +83,6 @@ export default function Publikasi() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border border-gray-400 px-2 py-[6px] rounded text-sm w-64"
           />
-
-          <button
-            className="bg-blue-600 text-white text-sm px-4 py-[6px] rounded hover:bg-blue-800"
-            onClick={() => {
-              // Sudah otomatis filter real-time, ini hanya UI
-            }}
-          >
-            Cari 🔍
-          </button>
         </div>
 
         {/* Tabel */}
@@ -111,7 +105,11 @@ export default function Publikasi() {
                 </tr>
               ) : (
                 filteredData.map((item, index) => (
-                  <tr key={item.id} className="text-sm border-t">
+                  <tr
+                    key={item.id}
+                    onClick={() => router.push(`/publikasi/${item.id}`)}
+                    className="text-sm border-t cursor-pointer hover:bg-gray-50"
+                  >
                     <td className="p-3 border">{index + 1}</td>
                     <td className="p-3 border">{item.tahun}</td>
                     <td className="p-3 border">
@@ -127,14 +125,18 @@ export default function Publikasi() {
                           <p><strong>Tahun:</strong> {item.tahun}</p>
                           <p><strong>Kategori:</strong> {item.kategori}</p>
                           <p><strong>Abstrak:</strong> {item.abstrak}</p>
-                          <p><strong>Lampiran:</strong> {item.lampiran}</p>
                         </div>
                       </div>
                     </td>
                     <td className="p-3 border text-center">
-                      <button className="px-3 py-[6px] text-sm border bg-blue-600 text-white hover:bg-blue-900">
+                      <a
+                        href={item.lampiran}
+                        download
+                        onClick={(e) => e.stopPropagation()} // biar klik tombol ga ikut redirect row
+                        className="px-3 py-[6px] text-sm border bg-blue-600 text-white rounded hover:bg-blue-900"
+                      >
                         Download
-                      </button>
+                      </a>
                     </td>
                   </tr>
                 ))

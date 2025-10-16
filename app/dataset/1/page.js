@@ -21,7 +21,7 @@ export default function DetailDataset() {
 
   // 🔹 Ambil data JSON
   useEffect(() => {
-    fetch("/response_1755228308890.json")
+    fetch("/dataset1.json")
       .then((res) => res.json())
       .then((json) => {
         setDataTable(json);

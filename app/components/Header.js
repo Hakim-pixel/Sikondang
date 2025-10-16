@@ -19,7 +19,7 @@ export default function Header() {
         <Link href="/organisasi" className="hover:text-yellow-400 transition-colors">Organisasi</Link>
         <Link href="/publikasi" className="hover:text-yellow-400 transition-colors">Publikasi</Link>
         <Link href="https://sikondang.serangkota.go.id/api/documentation" className="hover:text-yellow-400 transition-colors">Doc API</Link>
-        <Link href="/Login"><button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-md transition-colors" >
+        <Link href="/login"><button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-md transition-colors" >
           Login
         </button></Link>
       </nav>

@@ -55,7 +55,7 @@ export default function Footer() {
                 <a href="https://instagram.com/hakimm.png" target="_blank" rel="noopener noreferrer">
                   <img src="/assets/footer/ig.png" alt="Instagram" className="h-5 w-5 hover:opacity-80" />
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://youtu.be/grmI9Lpkzr4?si=ULgNzoTZHXkQSC9c" target="_blank" rel="noopener noreferrer">
                   <img src="/assets/footer/yt.png" alt="YouTube" className="h-5 w-5 hover:opacity-80" />
                 </a>
               </div>
