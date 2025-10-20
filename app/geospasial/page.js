@@ -1,37 +1,28 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { DefaultIcon } from '@/lib/leafletIcons';
+import Link from 'next/link';
+import { createDefaultIcon } from '@/lib/leafletIcons';
 
 // Dynamic import React-Leaflet
-const MapContainer = dynamic(
-  () => import('react-leaflet').then(mod => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import('react-leaflet').then(mod => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import('react-leaflet').then(mod => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(
-  () => import('react-leaflet').then(mod => mod.Popup),
-  { ssr: false }
-);
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 
-export default function Home() {
+export default function GeospasialPage() {
+  const [defaultIcon, setDefaultIcon] = useState(null);
 
-  // Dark mode toggle
   useEffect(() => {
+    setDefaultIcon(createDefaultIcon());
     document.documentElement.classList.add('transition-colors', 'duration-300');
   }, []);
 
-  // Data contoh
+  if (!defaultIcon) return null; // tunggu icon siap
+
+  // --- Data ---
   const stats = [
     { title: 'Luas Wilayah (km²)', value: '266,71', desc: 'Perda No. 6 Tahun 2025' },
     { title: 'Jumlah Penduduk', value: '723.794', desc: 'PDAK KEMENDAGRI 2024' },
@@ -98,10 +89,7 @@ export default function Home() {
       {/* STATISTIK */}
       <section className="flex flex-wrap justify-center gap-6 py-10 bg-white dark:bg-gray-900 w-full">
         {stats.map((s, i) => (
-          <div
-            key={i}
-            className="w-48 p-4 rounded-lg shadow border text-center bg-white dark:bg-gray-800"
-          >
+          <div key={i} className="w-48 p-4 rounded-lg shadow border text-center bg-white dark:bg-gray-800">
             <h3 className="text-xs text-gray-600 dark:text-gray-300 mb-1">{s.title}</h3>
             <p className="text-2xl font-bold dark:text-white">{s.value}</p>
             <p className="text-[10px] text-gray-400 dark:text-gray-400">{s.desc}</p>
@@ -120,11 +108,7 @@ export default function Home() {
               className="flex flex-col items-center group focus:outline-none"
             >
               <div className="w-20 h-20 rounded-full border-4 border-blue-700 flex items-center justify-center shadow-md transition transform duration-300 ease-in-out group-hover:scale-110 active:scale-95 bg-white overflow-hidden">
-                <img
-                  src={ds.icon}
-                  alt={ds.title}
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <img src={ds.icon} alt={ds.title} className="w-12 h-12 object-contain rounded-full" />
               </div>
               <p className="mt-2 text-xs font-semibold text-gray-800 dark:text-white text-center">{ds.title}</p>
             </Link>
@@ -134,40 +118,23 @@ export default function Home() {
 
       {/* SIMPUL JARINGAN */}
       <section className="w-full py-12 bg-white dark:bg-gray-900 text-center">
-        <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
-          Simpul Jaringan Informasi Geospasial
-        </h2>
-        <p className="mb-8 text-gray-600 dark:text-gray-300">
-          Pemerintah Kota Serang
-        </p>
+        <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Simpul Jaringan Informasi Geospasial</h2>
+        <p className="mb-8 text-gray-600 dark:text-gray-300">Pemerintah Kota Serang</p>
         <div className="mx-auto max-w-6xl grid grid-cols-2 md:grid-cols-5 gap-8 px-4 justify-items-center">
           {simpul.map((s, i) => (
             <Link
-              href={`/simpul/${s.title.toLowerCase().replace(/\s+/g, '-')}`}
               key={i}
-              className="
-                relative flex flex-col items-center p-4
-                bg-white dark:bg-gray-800
-                border-2 border-gray-300
-                rounded-b-[40%]
-                shadow-md transition-all duration-300
-                hover:border-blue-500 hover:shadow-xl
-              "
+              href={`/simpul/${s.title.toLowerCase().replace(/\s+/g, '-')}`}
+              className="relative flex flex-col items-center p-4 bg-white dark:bg-gray-800 border-2 border-gray-300 rounded-b-[40%] shadow-md transition-all duration-300 hover:border-blue-500 hover:shadow-xl"
             >
               <div className="w-20 h-20 mb-2 flex items-center justify-center">
                 <img
                   src={s.icon}
                   alt={s.title}
-                  className="
-                    w-16 h-16 object-contain
-                    transition-transform duration-500
-                    group-hover:scale-110 group-hover:rotate-3
-                  "
+                  className="w-16 h-16 object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                 />
               </div>
-              <p className="text-xs text-gray-700 dark:text-white font-semibold">
-                {s.title}
-              </p>
+              <p className="text-xs text-gray-700 dark:text-white font-semibold">{s.title}</p>
             </Link>
           ))}
         </div>
@@ -177,7 +144,7 @@ export default function Home() {
       <section className="w-full h-[400px]">
         <MapContainer center={[-6.1128, 106.1502]} zoom={12} className="w-full h-full">
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={[-6.1128, 106.1502]} icon={DefaultIcon}>
+          <Marker position={[-6.1128, 106.1502]} icon={defaultIcon}>
             <Popup>Ini Pusat Kota Serang, Banten.</Popup>
           </Marker>
         </MapContainer>
