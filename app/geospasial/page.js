@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
+import { DefaultIcon } from '@/lib/leafletIcons';
 
-// Dynamic import komponen react-leaflet
+// Dynamic import React-Leaflet
 const MapContainer = dynamic(
   () => import('react-leaflet').then(mod => mod.MapContainer),
   { ssr: false }
@@ -24,20 +25,13 @@ const Popup = dynamic(
 );
 
 export default function Home() {
-  useEffect(() => {
-    (async () => {
-      const L = await import('leaflet');
 
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: '/leaflet/images/marker-icon-2x.png',
-        iconUrl: '/leaflet/images/marker-icon.png',
-        shadowUrl: '/leaflet/images/marker-shadow.png',
-      });
-    })();
+  // Dark mode toggle
+  useEffect(() => {
+    document.documentElement.classList.add('transition-colors', 'duration-300');
   }, []);
 
-  // ---- Data ----
+  // Data contoh
   const stats = [
     { title: 'Luas Wilayah (km²)', value: '266,71', desc: 'Perda No. 6 Tahun 2025' },
     { title: 'Jumlah Penduduk', value: '723.794', desc: 'PDAK KEMENDAGRI 2024' },
@@ -60,24 +54,23 @@ export default function Home() {
   ];
 
   const simpul = [
-    { title: 'BKPSDM', icon: '/assets/geospasial/peta.png' },
-    { title: 'KESBANGPOL', icon: '/assets/geospasial/peta.png' },
-    { title: 'BPBD', icon: '/assets/geospasial/peta.png' },
-    { title: 'BAPENDA', icon: '/assets/geospasial/peta.png' },
+    { title: 'BKPSDM', icon: '/assets/geospasial/bkpsdm.png' },
+    { title: 'KESBANGPOL', icon: '/assets/geospasial/kesbangpol.jpg' },
+    { title: 'BPBD', icon: '/assets/geospasial/bpbd.png' },
+    { title: 'BAPENDA', icon: '/assets/geospasial/bapenda.jpg' },
     { title: 'BPKD', icon: '/assets/geospasial/peta.png' },
-    { title: 'BAPPEDA', icon: '/assets/geospasial/peta.png' },
-    { title: 'DISKOMINFO', icon: '/assets/geospasial/peta.png' },
+    { title: 'BAPPEDA', icon: '/assets/geospasial/bappeda.jpg' },
+    { title: 'DISKOMINFO', icon: '/assets/geospasial/diskominfo.png' },
     { title: 'DISKUKM', icon: '/assets/geospasial/peta.png' },
-    { title: 'DINHUB', icon: '/assets/geospasial/peta.png' },
-    { title: 'PENDUDUKAN', icon: '/assets/geospasial/peta.png' },
+    { title: 'DINHUB', icon: '/assets/geospasial/dinhub.jpg' },
+    { title: 'PENDUDUKAN', icon: '/assets/geospasial/pendudukan.png' },
   ];
 
   return (
     <main className="flex flex-col items-center w-full">
+      {/* Dark mode toggle */}
       <button
-        onClick={() => {
-          document.documentElement.classList.toggle('dark');
-        }}
+        onClick={() => document.documentElement.classList.toggle('dark')}
         className="fixed top-4 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-gray-700"
       >
         🌙
@@ -184,7 +177,7 @@ export default function Home() {
       <section className="w-full h-[400px]">
         <MapContainer center={[-6.1128, 106.1502]} zoom={12} className="w-full h-full">
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={[-6.1128, 106.1502]}>
+          <Marker position={[-6.1128, 106.1502]} icon={DefaultIcon}>
             <Popup>Ini Pusat Kota Serang, Banten.</Popup>
           </Marker>
         </MapContainer>

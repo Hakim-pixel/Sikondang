@@ -49,13 +49,12 @@ export default function BeritaPage() {
           />
         </div>
 
-        {/* Scrollable News List */}
         {filteredNews.length > 0 ? (
           <div className="max-h-[600px] overflow-y-auto pr-2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredNews.map((a) => (
+              {filteredNews.map((a, idx) => (
                 <Card
-                  key={a.id}
+                  key={`${a.id}-${idx}`}
                   className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                 >
                   <Image
@@ -77,7 +76,7 @@ export default function BeritaPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">{a.date}</span>
                       <Link
-                        href={`/berita/${a.id}`}
+                        href={`/berita/2`}
                         className="text-blue-600 hover:text-blue-700 font-medium text-sm inline-flex items-center gap-1"
                       >
                         Baca Selengkapnya <ArrowRight className="h-3 w-3" />
