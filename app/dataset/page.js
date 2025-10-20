@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
 import {
   Card,
   CardHeader,
@@ -18,17 +19,18 @@ export default function DatasetPage() {
   const [datasets, setDatasets] = useState([]);
   const [search, setSearch] = useState("");
 
+  // Ambil data dari Supabase
   useEffect(() => {
     async function fetchData() {
-      try {
-        // ✅ Ganti endpoint agar ambil data dari backend kamu (misal Express.js)
-        const res = await fetch("http://localhost:5000/api/datasets");
+      const { data, error } = await supabase
+        .from("datasets")
+        .select("*")
+        .order("id", { ascending: false });
 
-        if (!res.ok) throw new Error("Gagal mengambil dataset");
-        const data = await res.json();
-        setDatasets(data);
-      } catch (err) {
-        console.error(err);
+      if (error) {
+        console.error("Gagal mengambil dataset:", error.message);
+      } else {
+        setDatasets(data || []);
       }
     }
     fetchData();
@@ -106,7 +108,10 @@ export default function DatasetPage() {
                         <Download className="h-4 w-4" /> {d.downloads || 0} unduhan
                       </div>
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" /> {d.lastUpdate || "-"}
+                        <Calendar className="h-4 w-4" />{" "}
+                        {d.lastupdate
+                          ? new Date(d.lastupdate).toLocaleDateString("id-ID")
+                          : "-"}
                       </div>
                     </div>
                     <div className="flex gap-2">

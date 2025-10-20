@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -12,37 +13,28 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
 
-    if (!username || !password) {
-      setError("Username dan password wajib diisi.");
+    if (!email || !password) {
+      setError("Email dan password wajib diisi.");
       return;
     }
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    // 🔥 Login via Supabase Auth
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Username atau password salah.");
-        return;
-      }
-
-      // Simpan session ke localStorage (sederhana, bisa pakai cookie juga)
-      localStorage.setItem("user", JSON.stringify(data));
-
-      // ✅ Redirect ke halaman admin/dataset
-      router.push("/admin/dataset");
-
-    } catch (err) {
-      console.error(err);
-      setError("Gagal menghubungi server.");
+    if (error) {
+      console.error(error);
+      setError("Email atau password salah.");
+      return;
     }
+
+    // ✅ Simpan session ke localStorage
+    localStorage.setItem("supabaseSession", JSON.stringify(data.session));
+
+    // 🔁 Redirect ke dashboard admin
+    router.push("/admin/dataset");
   };
 
   return (
@@ -67,10 +59,10 @@ export default function LoginPage() {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
 

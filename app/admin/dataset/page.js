@@ -1,6 +1,8 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function AdminDatasetPage() {
   const router = useRouter();
@@ -16,28 +18,31 @@ export default function AdminDatasetPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState(null);
 
-  const API_URL = "http://localhost:5000/api/datasets";
-
-  // Proteksi halaman: hanya bisa diakses jika sudah login
+  // ✅ Proteksi halaman admin (harus login Supabase)
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      router.replace("/login");
-      return;
-    }
-    setUser(JSON.parse(storedUser));
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        router.replace("/login");
+      } else {
+        setUser(data.user);
+      }
+    };
+    getUser();
   }, [router]);
 
-  // Ambil semua dataset
+  // ✅ Ambil semua dataset dari Supabase
   const fetchDatasets = async () => {
-    try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error("Gagal mengambil data");
-      const data = await res.json();
-      setDatasets(data);
-    } catch (err) {
-      console.error(err);
+    const { data, error } = await supabase
+      .from("datasets")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.error(error);
       alert("Gagal memuat data dataset");
+    } else {
+      setDatasets(data || []);
     }
   };
 
@@ -45,23 +50,39 @@ export default function AdminDatasetPage() {
     fetchDatasets();
   }, []);
 
-  // Tambah / Edit dataset
+  // ✅ Tambah atau Edit dataset
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const method = isEditing ? "PUT" : "POST";
-    const url = isEditing ? `${API_URL}/${formData.id}` : API_URL;
+    let result;
+    if (isEditing) {
+      result = await supabase
+        .from("datasets")
+        .update({
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          source: formData.source,
+          year: formData.year,
+        })
+        .eq("id", formData.id);
+    } else {
+      result = await supabase.from("datasets").insert([
+        {
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          source: formData.source,
+          year: formData.year,
+        },
+      ]);
+    }
 
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) throw new Error("Gagal menyimpan dataset");
-
-      alert(isEditing ? "Dataset berhasil diubah!" : "Dataset berhasil ditambahkan!");
+    if (result.error) {
+      console.error(result.error);
+      alert("❌ Gagal menyimpan dataset: " + result.error.message);
+    } else {
+      alert(isEditing ? "✅ Dataset berhasil diubah!" : "✅ Dataset berhasil ditambahkan!");
       setFormData({
         id: null,
         title: "",
@@ -72,39 +93,36 @@ export default function AdminDatasetPage() {
       });
       setIsEditing(false);
       fetchDatasets();
-    } catch (err) {
-      console.error(err);
-      alert("Terjadi kesalahan saat menyimpan dataset");
     }
   };
 
-  // Edit data
+  // ✅ Edit dataset
   const handleEdit = (data) => {
     setFormData(data);
     setIsEditing(true);
   };
 
-  // Hapus data
+  // ✅ Hapus dataset
   const handleDelete = async (id) => {
     if (!confirm("Yakin mau hapus dataset ini?")) return;
-    try {
-      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Gagal hapus dataset");
-      alert("Dataset berhasil dihapus!");
+
+    const { error } = await supabase.from("datasets").delete().eq("id", id);
+    if (error) {
+      console.error(error);
+      alert("❌ Gagal menghapus dataset: " + error.message);
+    } else {
+      alert("🗑️ Dataset berhasil dihapus!");
       fetchDatasets();
-    } catch (err) {
-      console.error(err);
-      alert("Gagal menghapus dataset");
     }
   };
 
-  // Logout
-  const handleLogout = () => {
-    localStorage.removeItem("user");
+  // ✅ Logout
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     router.push("/login");
   };
 
-  // Jika belum login, jangan render dulu
+  // Jika belum login
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen text-gray-600">
@@ -122,7 +140,7 @@ export default function AdminDatasetPage() {
         </h1>
         <div className="flex items-center gap-4">
           <span className="text-gray-700">
-            👋 Halo, <strong>{user.username}</strong>
+            👋 Halo, <strong>{user.email}</strong>
           </span>
           <button
             onClick={handleLogout}
@@ -133,21 +151,21 @@ export default function AdminDatasetPage() {
         </div>
       </div>
 
-      {/* Konten utama */}
+      {/* Form Tambah/Edit */}
       <div className="bg-white shadow-md rounded-xl p-6">
-        {/* Form Tambah/Edit */}
         <form
           onSubmit={handleSubmit}
           className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg"
         >
           <input
             type="text"
-            placeholder="Judul"
+            placeholder="Judul Dataset"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             required
             className="border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none"
           />
+
           <input
             type="text"
             placeholder="Kategori"
@@ -156,14 +174,16 @@ export default function AdminDatasetPage() {
             required
             className="border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none"
           />
+
           <input
             type="text"
-            placeholder="Sumber"
+            placeholder="Sumber Data"
             value={formData.source}
             onChange={(e) => setFormData({ ...formData, source: e.target.value })}
             required
             className="border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none"
           />
+
           <input
             type="number"
             placeholder="Tahun"
@@ -172,6 +192,7 @@ export default function AdminDatasetPage() {
             required
             className="border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none"
           />
+
           <textarea
             placeholder="Deskripsi"
             value={formData.description}
@@ -185,14 +206,16 @@ export default function AdminDatasetPage() {
           <button
             type="submit"
             className={`${
-              isEditing ? "bg-yellow-500 hover:bg-yellow-600" : "bg-blue-600 hover:bg-blue-700"
+              isEditing
+                ? "bg-yellow-500 hover:bg-yellow-600"
+                : "bg-blue-600 hover:bg-blue-700"
             } text-white font-semibold py-2 rounded-md md:col-span-2 shadow-sm transition`}
           >
             {isEditing ? "💾 Simpan Perubahan" : "➕ Tambah Dataset"}
           </button>
         </form>
 
-        {/* Tabel Data */}
+        {/* Tabel Dataset */}
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
             <thead>
@@ -206,10 +229,7 @@ export default function AdminDatasetPage() {
             </thead>
             <tbody>
               {datasets.map((d) => (
-                <tr
-                  key={d.id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
+                <tr key={d.id} className="hover:bg-gray-50 transition-colors">
                   <td className="border p-2">{d.title}</td>
                   <td className="border p-2">{d.category}</td>
                   <td className="border p-2">{d.source}</td>
@@ -219,17 +239,18 @@ export default function AdminDatasetPage() {
                       onClick={() => handleEdit(d)}
                       className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded mr-2 transition"
                     >
-                      Edit
+                      ✏️ Edit
                     </button>
                     <button
                       onClick={() => handleDelete(d.id)}
                       className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition"
                     >
-                      Hapus
+                      🗑️ Hapus
                     </button>
                   </td>
                 </tr>
               ))}
+
               {datasets.length === 0 && (
                 <tr>
                   <td colSpan="5" className="text-center p-4 text-gray-500">
