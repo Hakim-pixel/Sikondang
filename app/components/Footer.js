@@ -35,10 +35,10 @@ export default function Footer() {
             <div className="flex flex-col gap-2.5">
               <h4 className="font-semibold text-sm">📈 Statistik Pengunjung</h4>
               <div className="flex gap-3 text-xs">
-                <span className="bg-black px-2 py-0.5 rounded text-[10px]">58</span> Hari ini
+                <span className="bg-black px-2 py-0.5 rounded text-[10px]">78</span> Hari ini
               </div>
               <div className="flex gap-3 text-xs">
-                <span className="bg-black px-2 py-0.5 rounded text-[10px]">2041</span> Bulan ini
+                <span className="bg-black px-2 py-0.5 rounded text-[10px]">2097</span> Bulan ini
               </div>
             </div>
 
