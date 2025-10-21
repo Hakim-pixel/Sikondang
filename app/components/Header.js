@@ -94,7 +94,7 @@ export default function Header() {
           >
             Doc API
           </Link>
-          <Link href="/uptodate" onClick={() => setIsOpen(false)}>
+          <Link href="/login" onClick={() => setIsOpen(false)}>
             <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-md w-full mt-1">
               Login
             </button>
